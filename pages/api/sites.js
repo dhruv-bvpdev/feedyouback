@@ -3,7 +3,7 @@ import { collection, query, getDocs, getFirestore } from 'firebase/firestore'
 
 const adminDB = getFirestore(firebaseAdmin)
 
-export default async (_, res) => {
+const getSites = async (_, res) => {
   const q = query(collection(adminDB, 'sites'))
 
   const querySnapshot = await getDocs(q)
@@ -12,5 +12,7 @@ export default async (_, res) => {
     sites.push({ id: doc.id, ...doc.data() })
   })
 
-  res.status(200).json(sites)
+  res.status(200).json({ sites })
 }
+
+export default getSites

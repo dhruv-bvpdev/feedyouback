@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { mutate } from 'swr'
 import {
   Button,
   FormControl,
@@ -27,13 +28,14 @@ export default function AddSiteModal({ children }) {
   const toast = useToast()
   const auth = useAuth()
 
-  const createSite = handleSubmit(async ({ siteName, siteLink }) => {
-    createSiteOnFireStore({
+  const createSite = handleSubmit(async ({ name, link }) => {
+    const newSite = {
       authorId: auth.user.uid,
       createdAt: new Date().toISOString(),
-      siteName,
-      siteLink
-    })
+      name,
+      link
+    }
+    createSiteOnFireStore(newSite)
     toast({
       title: 'Success',
       description: "We've added you site",
@@ -41,6 +43,16 @@ export default function AddSiteModal({ children }) {
       duration: 5000,
       isClosable: true
     })
+    mutate(
+      '/api/sites',
+      async data => {
+        console.log(data)
+        console.log([...data.sites, newSite])
+        return { sites: [...data.sites, newSite] }
+      },
+      false
+    )
+    onClose()
   })
 
   return (
@@ -68,7 +80,7 @@ export default function AddSiteModal({ children }) {
               <FormLabel>Name</FormLabel>
               <Input
                 ref={initialRef}
-                {...register('siteName', { required: true })}
+                {...register('name', { required: true })}
                 placeholder="My Site"
               />
             </FormControl>
@@ -77,7 +89,7 @@ export default function AddSiteModal({ children }) {
               <FormLabel>Link</FormLabel>
               <Input
                 placeholder="https://www.website.com"
-                {...register('siteLink', { required: true })}
+                {...register('link', { required: true })}
               />
             </FormControl>
           </ModalBody>
@@ -91,7 +103,7 @@ export default function AddSiteModal({ children }) {
               fontWeight="medium"
               backgroundColor="#99FFFE"
               color="#194D4C"
-              disabled={!watch('siteName') || !watch('siteLink')}
+              disabled={!watch('name') || !watch('link')}
               type="submit"
             >
               Create
