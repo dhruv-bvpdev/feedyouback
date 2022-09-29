@@ -11,32 +11,52 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { createSiteOnFireStore } from '@/lib/firestore'
+import { useAuth } from '@/lib/auth'
 
-export default function AddSiteModal() {
+export default function AddSiteModal({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const initialRef = useRef(null)
 
   const { register, handleSubmit, watch } = useForm()
 
-  const createSite = handleSubmit(async formData => {
-    console.table(formData)
-    createSiteOnFireStore(formData)
+  const toast = useToast()
+  const auth = useAuth()
+
+  const createSite = handleSubmit(async ({ siteName, siteLink }) => {
+    createSiteOnFireStore({
+      authorId: auth.user.uid,
+      createdAt: new Date().toISOString(),
+      siteName,
+      siteLink
+    })
+    toast({
+      title: 'Success',
+      description: "We've added you site",
+      status: 'success',
+      duration: 5000,
+      isClosable: true
+    })
   })
 
   return (
     <>
       <Button
         onClick={onOpen}
+        backgroundColor="gray.900"
+        color="white"
         fontWeight="medium"
-        maxW="200px"
-        variant="solid"
-        size="md"
+        _hover={{ bg: 'gray.700' }}
+        _active={{
+          bg: 'gray.800',
+          transform: 'scale(0.95)'
+        }}
       >
-        Add Your First Site
+        {children}
       </Button>
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
