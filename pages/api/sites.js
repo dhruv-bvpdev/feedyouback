@@ -1,5 +1,10 @@
 import firebaseAdmin from '@/lib/firebase-admin'
-import { collection, query, getDocs, getFirestore } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  getDocs,
+  getFirestore
+} from 'firebase/firestore/lite'
 
 const adminDB = getFirestore(firebaseAdmin)
 
