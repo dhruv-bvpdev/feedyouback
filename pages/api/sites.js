@@ -1,19 +1,12 @@
-import firebaseAdmin from '@/lib/firebase-admin'
-import {
-  collection,
-  query,
-  getDocs,
-  getFirestore
-} from 'firebase/firestore/lite'
-
-const adminDB = getFirestore(firebaseAdmin)
+import admin from '@/lib/firebase-admin'
 
 const getSites = async (_, res) => {
-  const q = query(collection(adminDB, 'sites'))
+  const firebase = admin.firestore()
+  const snapshot = await firebase.collection('sites').get()
 
-  const querySnapshot = await getDocs(q)
-  let sites = []
-  querySnapshot.forEach(doc => {
+  const sites = []
+
+  snapshot.forEach(doc => {
     sites.push({ id: doc.id, ...doc.data() })
   })
 
