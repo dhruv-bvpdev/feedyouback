@@ -1,14 +1,11 @@
-import admin from '@/lib/firebase-admin'
+import { getAllSites } from '@/lib/db-admin'
 
 const getSites = async (_, res) => {
-  const firebase = admin.firestore()
-  const snapshot = await firebase.collection('sites').get()
+  const { sites, error } = await getAllSites()
 
-  const sites = []
-
-  snapshot.forEach(doc => {
-    sites.push({ id: doc.id, ...doc.data() })
-  })
+  if (error) {
+    res.status(500).json({ error })
+  }
 
   res.status(200).json({ sites })
 }
