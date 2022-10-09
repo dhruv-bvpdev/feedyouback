@@ -35,7 +35,8 @@ export default function Home() {
           Feed You Back
         </Text>{' '}
         is the easiest way to add comments or reviews to your <br /> static site
-        . It's still a work-in-progress, but you can try it out by logging in.
+        . It&apos;s still a work-in-progress, but you can try it out by logging
+        in.
       </Text>
 
       {auth.user ? (
