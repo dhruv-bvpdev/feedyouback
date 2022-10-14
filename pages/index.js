@@ -1,7 +1,9 @@
 import Head from 'next/head'
 import { useAuth } from '@/lib/auth'
-import { Button, Code, Flex, Text } from '@chakra-ui/react'
+import { Button, Code, Flex, Stack, Text } from '@chakra-ui/react'
 import Logo from '@/icons/Logo'
+import GithubLogo from '@/icons/GithubLogo'
+import GoogleLogo from '@/icons/GoogleLogo'
 
 export default function Home() {
   const auth = useAuth()
@@ -28,9 +30,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Logo boxSize="42px" mb={2} />
+      <Logo boxSize="65px" mb={2} />
 
-      <Text mb={4}>
+      <Text mb={4} fontSize="lg" p={6}>
         <Text as="span" fontWeight="bold" display="inline">
           Feed You Back
         </Text>{' '}
@@ -40,18 +42,59 @@ export default function Home() {
       </Text>
 
       {auth.user ? (
-        <Button as="a" size="sm" fontWeight="medium" href="/dashboard">
+        <Button
+          as="a"
+          href="/dashboard"
+          backgroundColor="white"
+          color="gray.900"
+          variant="outline"
+          mt={4}
+          size="lg"
+          fontWeight="medium"
+          _hover={{ bg: 'gray.100' }}
+          _active={{
+            bg: 'gray.100',
+            transform: 'scale(0.95)'
+          }}
+        >
           View Dashboard
         </Button>
       ) : (
-        <Button
-          mt={4}
-          size="sm"
-          fontSize="medium"
-          onClick={e => auth.signInWithGithub()}
-        >
-          Sign In
-        </Button>
+        <Stack>
+          <Button
+            leftIcon={<GithubLogo />}
+            onClick={e => auth.signInWithGithub()}
+            backgroundColor="gray.900"
+            color="white"
+            mt={4}
+            size="lg"
+            fontWeight="medium"
+            _hover={{ bg: 'gray.700' }}
+            _active={{
+              bg: 'gray.800',
+              transform: 'scale(0.95)'
+            }}
+          >
+            Sign In With Github
+          </Button>
+          <Button
+            leftIcon={<GoogleLogo />}
+            onClick={e => auth.signInWithGoogle()}
+            backgroundColor="white"
+            color="gray.900"
+            variant="outline"
+            mt={4}
+            size="lg"
+            fontWeight="medium"
+            _hover={{ bg: 'gray.100' }}
+            _active={{
+              bg: 'gray.100',
+              transform: 'scale(0.95)'
+            }}
+          >
+            Sign In With Google
+          </Button>
+        </Stack>
       )}
     </Flex>
   )
