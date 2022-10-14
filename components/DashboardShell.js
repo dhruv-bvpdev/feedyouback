@@ -1,20 +1,10 @@
-import {
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Heading,
-  Button,
-  Flex,
-  Link,
-  Avatar
-} from '@chakra-ui/react'
+import NextLink from 'next/link'
+import { Box, Button, Flex, Link, Avatar } from '@chakra-ui/react'
 import { useAuth } from '@/lib/auth'
 import Logo from '@/icons/Logo'
-import AddSiteModal from './AddSiteModal'
 
 export default function DashboardShell({ children }) {
-  const { user, signOutWithGithub } = useAuth()
+  const { user, signOutHandler } = useAuth()
 
   return (
     <Box backgroundColor="gray.100" h="100vh">
@@ -30,17 +20,19 @@ export default function DashboardShell({ children }) {
           px={8}
         >
           <Flex>
-            <Logo boxSize="24px" mr={8} />
-            <Link mr={4}>Sites</Link>
-            <Link>Feedback</Link>
+            <NextLink href="/" passHref>
+              <Logo boxSize="24px" mr={8} />
+            </NextLink>
+            <NextLink href="/dashboard" passHref>
+              <Link mr={4}>Sites</Link>
+            </NextLink>
+            <NextLink href="/feedback" passHref>
+              <Link>Feedback</Link>
+            </NextLink>
           </Flex>
           <Flex justifyContent="center" alignItems="center">
             {user && (
-              <Button
-                variant="ghost"
-                mr={2}
-                onClick={() => signOutWithGithub()}
-              >
+              <Button variant="ghost" mr={2} onClick={() => signOutHandler()}>
                 Log Out
               </Button>
             )}
@@ -49,15 +41,6 @@ export default function DashboardShell({ children }) {
         </Flex>
       </Flex>
       <Flex margin="0 auto" direction="column" maxW="1250px" px={8}>
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink>Sites</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <Flex justifyContent="space-between">
-          <Heading mb={8}>My Sites</Heading>
-          <AddSiteModal>+ Add Site</AddSiteModal>
-        </Flex>
         {children}
       </Flex>
     </Box>

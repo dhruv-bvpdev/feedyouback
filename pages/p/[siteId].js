@@ -49,6 +49,7 @@ export default function SiteFeedback({ initialFeedback }) {
     }
     setAllFeedback([newFeedback, ...allFeedback])
     createFeedbackOnFireStore(newFeedback)
+    inputElement.current.value = ''
   }
 
   return (
