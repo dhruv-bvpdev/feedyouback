@@ -35,7 +35,7 @@ export default function AddSiteModal({ children }) {
       name,
       link
     }
-    createSiteOnFireStore(newSite)
+    const { id } = createSiteOnFireStore(newSite)
     toast({
       title: 'Success',
       description: "We've added you site",
@@ -45,9 +45,9 @@ export default function AddSiteModal({ children }) {
     })
     mutate(
       ['/api/sites', auth.user.token],
-      async data => {
-        return { sites: [...data.sites, newSite] }
-      },
+      async data => ({
+        sites: [...data.sites, { id, ...newSite }]
+      }),
       false
     )
     onClose()
